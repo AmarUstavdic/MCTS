@@ -4,21 +4,21 @@ public class Main {
     public static void main(String[] args) {
 
 
+        boolean humanFirst = true;
+        char h = humanFirst ? 'x' : 'o';
+        char m = humanFirst ? 'o' : 'x';
+
+
         Scanner sc = new Scanner(System.in);
 
-
-
         MonteCarloTreeSearch mcts = new MonteCarloTreeSearch();
-
-
-        TicTacToeGameState gameState = new TicTacToeGameState('x', 'o');
+        TicTacToeGameState gameState = new TicTacToeGameState(h, m);
 
         System.out.println("Initial game state:");
         gameState.printBoard();
 
-        boolean human = true;
         while (!gameState.isTerminal()) {
-            if (human) {
+            if (humanFirst) {
                 // for human, we are performing random action
                 System.out.print("Enter move: ");
                 String[] tokens = sc.nextLine().split(" ");
@@ -28,14 +28,14 @@ public class Main {
                 System.out.println("After human [" + gameState.getCURRENT_PLAYER() + "] move:");
 
                 gameState.performAction(new Move(row, col));
-                human = false;
+                humanFirst = false;
             } else {
                 System.out.println("After MCTS [" + gameState.getCURRENT_PLAYER() + "] move:");
-                gameState = (TicTacToeGameState) mcts.search(gameState, 80);
+                gameState = (TicTacToeGameState) mcts.search(gameState, 100);
 
                 // at lest one move by MCTS has to be made before calling this function
                 System.out.println("MCTS depth: " + mcts.getDepth());
-                human = true;
+                humanFirst = true;
             }
             gameState.printBoard();
         }

@@ -106,17 +106,10 @@ public class MonteCarloTreeSearch {
     }
 
     private void backpropagation(Node node, double simulationResult) {
-
-        // TODO: Here we need to alternate values depending on the node that we are currently at.
-        // Might have fixed it.
-
+        // TODO: Here we might need to alternate the values.
         while (node != null) {
             node.incVisits();
-            if (node.getState().getLastToPlay() == node.getState().getMCTSAgent()) {
-                node.addValue(simulationResult);
-            } else {
-                node.addValue((simulationResult == 1) ? 0 : (simulationResult == 0 ? 1 : 0.5));
-            }
+            node.addValue(simulationResult);
             node = node.getParent();
         }
     }

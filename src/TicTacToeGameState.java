@@ -160,11 +160,9 @@ public class TicTacToeGameState implements State {
 
     @Override
     public double getSimulationOutcome() {
-
-        // TODO: Make sure this is handled properly.
-        // might have fixed it, but it look awful
-
-        return isWinner() ? 0 : (isDraw() ? 0.5 : 1);
+        // TODO: Play with this to get it right.
+        double reward = (this.LAST_TO_PLAY == this.MCTS_AGENT) ? 1 : -1;
+        return isWinner() ? 1 * reward : (isDraw() ? 0 : 1 * reward);
     }
 
 }
