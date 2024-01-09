@@ -24,7 +24,6 @@ public class MCTS {
         return root.getBestMove();
     }
 
-
     /**
      *  Selects the best child node in the Monte Carlo Tree Search (MCTS) process based on the Upper
      *  Confidence Bound for Trees (UTC) value. Starting from the root node (initial state), iteratively
@@ -40,7 +39,6 @@ public class MCTS {
         }
         return MCTSNode;
     }
-
 
     /**
      *  Expands a given Monte Carlo Tree Search (MCTS) node during the Expansion Phase.
@@ -61,7 +59,6 @@ public class MCTS {
         return MCTSNode;
     }
 
-
     /**
      *  Simulates the outcome of a Monte Carlo Tree Search (MCTS) node during the Simulation Phase.
      *  The simulation can be either a light simulation, where moves are chosen randomly, or a
@@ -78,7 +75,6 @@ public class MCTS {
         while (!clonedState.isTerminal()) clonedState.performRandomAction();
         return clonedState.getSimulationOutcome();
     }
-
 
     /**
      *  Performs the backpropagation phase in the Monte Carlo Tree Search (MCTS) algorithm.
@@ -98,7 +94,6 @@ public class MCTS {
             MCTSNode = MCTSNode.getParent();
         }
     }
-
 
     public MCTSNode getRoot() {
         return root;
