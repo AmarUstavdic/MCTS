@@ -33,7 +33,7 @@ public class Main {
                 humanFirst = false;
             } else {
                 System.out.println("After MCTS [" + gameState.getCURRENT_PLAYER() + "] move:");
-                gameState = (TicTacToeGameState) mcts.search(gameState, 500);
+                gameState = (TicTacToeGameState) mcts.search(gameState, 1000);
 
                 // at lest one move by MCTS has to be made before calling this function
                 System.out.println("MCTS depth: " + mcts.getDepth());

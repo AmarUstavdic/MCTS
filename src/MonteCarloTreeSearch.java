@@ -91,6 +91,11 @@ public class MonteCarloTreeSearch {
         return node;
     }
 
+
+    /*
+        if state has not been simulated --> return that state immediately
+        otherwise, for all legal moves, add children, and then pick a random child, and return it..
+     */
     private Node expansion(Node node) {
 
         // TODO: Check if this condition after && is okay to have here!
@@ -102,6 +107,12 @@ public class MonteCarloTreeSearch {
         return node;
     }
 
+    /*
+        At this step we can do light simulation or heavy simulation.
+        light simulation --> moves are chose randomly
+        heavy simulation --> we can use better heuristics, for choosing moves
+        (by doing heavy simulation, we should get better performing MCTS...)
+     */
     private double simulation(Node node) {
         State clonedState = node.getState().deepCopy();
         while (!clonedState.isTerminal()) {

@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Node {
 
@@ -54,15 +53,10 @@ public class Node {
 
 
     public State getBestMove() {
-        Node best = null;
-        int bestVisits = 0;
-        for (Node child : children) {
-            if (child.getVisits() > bestVisits) {
-                best = child;
-                bestVisits = child.getVisits();
-            }
+        Node best = this.children.stream().max(Comparator.comparingInt(Node::getVisits)).orElse(null);
+        if (best == null) {
+            throw new RuntimeException("Unable to get best state. The root has no children!");
         }
-        assert best != null;
         return best.getState();
     }
 
@@ -97,6 +91,7 @@ public class Node {
     }
 
     public Node getFirstChild() {
+        Collections.shuffle(children);
         return children.getFirst();
     }
 

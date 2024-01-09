@@ -109,7 +109,6 @@ public class TicTacToeGameState implements State {
 
     @Override
     public void performRandomAction() {
-
         List<Action> availableActions = this.getAvailableActions();
         Collections.shuffle(availableActions);
         this.performAction(availableActions.getFirst());
