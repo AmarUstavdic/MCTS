@@ -10,6 +10,8 @@ public class Node {
 
     public Node(State state, Node parent) {
         this.state = state;
+        this.visits = 0;
+        this.value = 0;
         this.parent = parent;
         this.children = new ArrayList<>();
     }
@@ -28,7 +30,7 @@ public class Node {
 
 
     private double calculateUct() {
-        if (visits == 0) {
+        if (this.visits == 0) {
             return Double.MAX_VALUE;
         } else {
             double exploitation = this.value / this.visits;

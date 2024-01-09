@@ -1,13 +1,12 @@
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
 
         boolean humanFirst = false;
         char h = humanFirst ? 'x' : 'o';
         char m = humanFirst ? 'o' : 'x';
-
 
         Scanner sc = new Scanner(System.in);
 
@@ -19,13 +18,16 @@ public class Main {
 
         while (!gameState.isTerminal()) {
             if (humanFirst) {
-                // for human, we are performing random action
-                System.out.print("Enter move: ");
-                String[] tokens = sc.nextLine().split(" ");
-                int row = Integer.parseInt(tokens[0]);
-                int col = Integer.parseInt(tokens[1]);
 
-                // Warning: I am not checking if human is playing legal move, but I should check for that...
+                int row, col;
+                while (true) {
+                    System.out.print("Enter move: ");
+                    String[] tokens = sc.nextLine().split(" ");
+                    row = Integer.parseInt(tokens[0]);
+                    col = Integer.parseInt(tokens[1]);
+                    if (gameState.isValidMove(row, col)) break;
+                    System.out.println("Invalid move. Try again: ");
+                }
 
                 System.out.println("After human [" + gameState.getCURRENT_PLAYER() + "] move:");
 
@@ -33,7 +35,7 @@ public class Main {
                 humanFirst = false;
             } else {
                 System.out.println("After MCTS [" + gameState.getCURRENT_PLAYER() + "] move:");
-                gameState = (TTTGameState) mcts.search(gameState, 1000);
+                gameState = (TTTGameState) mcts.search(gameState, 500);
 
                 // at lest one move by MCTS has to be made before calling this function
                 System.out.println("MCTS depth: " + mcts.getDepth());
@@ -43,7 +45,6 @@ public class Main {
         }
 
         System.out.println("MCTS reward: " + gameState.getSimulationOutcome());
-
 
     }
 }

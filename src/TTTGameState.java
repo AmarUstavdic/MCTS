@@ -68,7 +68,7 @@ public class TTTGameState implements State {
         CURRENT_PLAYER = (CURRENT_PLAYER == 'x') ? 'o' : 'x';
     }
 
-    private boolean isValidMove(int row, int col) {
+    public boolean isValidMove(int row, int col) {
         return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE && board[row][col] == EMPTY_CELL;
     }
 
@@ -117,6 +117,9 @@ public class TTTGameState implements State {
     @Override
     public State deepCopy() {
         TTTGameState clonedState = new TTTGameState(HUMAN_PLAYER, MCTS_AGENT);
+
+        // TODO: Make sure the current player of the state is correct
+
         clonedState.setCURRENT_PLAYER(this.CURRENT_PLAYER);
         char[][] copy = Arrays.stream(board).map(row -> Arrays.copyOf(row, row.length)).toArray(char[][]::new);
         clonedState.setBoard(copy);
