@@ -28,7 +28,7 @@ public class MonteCarloTreeSearch {
 
         System.out.println("Number of simulations: " + simulations);
 
-        return root.getBestChild().getState();
+        return root.getBestMove();
     }
 
 
@@ -66,7 +66,9 @@ public class MonteCarloTreeSearch {
     }
 
     private Node expansion(Node node) {
+
         // TODO: Check if this condition after && is okay to have here!
+
         if (node.isSimulated() && !node.getState().isTerminal()) {
             node.expand();
             return node.getFirstChild();
@@ -83,8 +85,13 @@ public class MonteCarloTreeSearch {
     }
 
     private void backpropagation(Node node, double simulationResult) {
+
+        // TODO: Test if backpropagation works correctly!
+
         while (node != null) {
-           node = node.backpropagate(simulationResult);
+            node.incVisits();
+            node.addValue(simulationResult);
+            node = node.getParent();
         }
     }
 

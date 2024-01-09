@@ -5,15 +5,6 @@ import java.util.Random;
 
 public class TicTacToeGameState implements State {
 
-    private class Move implements Action {
-        private final int row;
-        private final int col;
-
-        public Move(int row, int col) {
-            this.row = row;
-            this.col = col;
-        }
-    }
 
     private final char EMPTY_CELL = '-';
     private final int BOARD_SIZE = 3;
@@ -113,7 +104,7 @@ public class TicTacToeGameState implements State {
     @Override
     public void performAction(Action action) {
         Move move = (Move) action;
-        board[move.row][move.col] = CURRENT_PLAYER;
+        board[move.getRow()][move.getCol()] = CURRENT_PLAYER;
         switchPlayer();
     }
 
@@ -155,6 +146,16 @@ public class TicTacToeGameState implements State {
     public boolean equals(State state) {
         TicTacToeGameState gameState = (TicTacToeGameState) state;
         return Arrays.deepEquals(board, gameState.board);
+    }
+
+    @Override
+    public char getCurrentPlayer() {
+        return CURRENT_PLAYER;
+    }
+
+    @Override
+    public char getMCTSPlayer() {
+        return MCTS_AGENT;
     }
 
 }

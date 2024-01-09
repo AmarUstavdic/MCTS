@@ -53,17 +53,39 @@ public class Node {
     }
 
 
-    public Node backpropagate(double simulationResult) {
-        visits++;
-        // TODO: Figure out if this is true?!
-        // this value we need to alternate since each node represents state after different player
-        value += simulationResult;
-        return parent;
+    public State getBestMove() {
+        Node best = null;
+        int bestVisits = 0;
+        for (Node child : children) {
+            if (child.getVisits() > bestVisits) {
+                best = child;
+                bestVisits = child.getVisits();
+            }
+        }
+        assert best != null;
+        return best.getState();
     }
 
 
+
+    public void incVisits() {
+        this.visits++;
+    }
+
+    public void addValue(double value) {
+        this.value += value;
+    }
+
     public State getState() {
         return state;
+    }
+
+    public int getVisits() {
+        return visits;
+    }
+
+    public Node getParent() {
+        return parent;
     }
 
     public void setParent(Node parent) {

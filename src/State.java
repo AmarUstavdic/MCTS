@@ -17,4 +17,8 @@ public interface State {
 
     boolean equals(State state);
 
+    char getCurrentPlayer();
+
+    char getMCTSPlayer();
+
 }
