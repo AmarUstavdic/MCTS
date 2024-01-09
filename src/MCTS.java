@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class MonteCarloTreeSearch {
+public class MCTS {
 
     private Node root;
 
@@ -48,7 +48,7 @@ public class MonteCarloTreeSearch {
                     if (grandChild.getState().equals(state)) {
 
                         System.out.println("Root replaced with grandchild:");
-                        TicTacToeGameState s = (TicTacToeGameState) grandChild.getState();
+                        TTTGameState s = (TTTGameState) grandChild.getState();
                         s.printBoard();
                         System.out.println("-------------------------------");
 

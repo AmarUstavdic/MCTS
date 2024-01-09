@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class TicTacToeGameState implements State {
+public class TTTGameState implements State {
 
 
     private final char EMPTY_CELL = '-';
@@ -11,7 +11,7 @@ public class TicTacToeGameState implements State {
     private char CURRENT_PLAYER;
     private char LAST_TO_PLAY;
 
-    public TicTacToeGameState(char HUMAN_PLAYER, char MCTS_AGENT) {
+    public TTTGameState(char HUMAN_PLAYER, char MCTS_AGENT) {
         this.HUMAN_PLAYER = HUMAN_PLAYER;
         this.MCTS_AGENT = MCTS_AGENT;
         this.board = new char[BOARD_SIZE][BOARD_SIZE];
@@ -116,7 +116,7 @@ public class TicTacToeGameState implements State {
 
     @Override
     public State deepCopy() {
-        TicTacToeGameState clonedState = new TicTacToeGameState(HUMAN_PLAYER, MCTS_AGENT);
+        TTTGameState clonedState = new TTTGameState(HUMAN_PLAYER, MCTS_AGENT);
         clonedState.setCURRENT_PLAYER(this.CURRENT_PLAYER);
         char[][] copy = Arrays.stream(board).map(row -> Arrays.copyOf(row, row.length)).toArray(char[][]::new);
         clonedState.setBoard(copy);
@@ -130,7 +130,7 @@ public class TicTacToeGameState implements State {
 
     @Override
     public boolean equals(State state) {
-        TicTacToeGameState gameState = (TicTacToeGameState) state;
+        TTTGameState gameState = (TTTGameState) state;
         return Arrays.deepEquals(board, gameState.board);
     }
 

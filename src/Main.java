@@ -11,8 +11,8 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
 
-        MonteCarloTreeSearch mcts = new MonteCarloTreeSearch();
-        TicTacToeGameState gameState = new TicTacToeGameState(h, m);
+        MCTS mcts = new MCTS();
+        TTTGameState gameState = new TTTGameState(h, m);
 
         System.out.println("Initial game state:");
         gameState.printBoard();
@@ -33,7 +33,7 @@ public class Main {
                 humanFirst = false;
             } else {
                 System.out.println("After MCTS [" + gameState.getCURRENT_PLAYER() + "] move:");
-                gameState = (TicTacToeGameState) mcts.search(gameState, 1000);
+                gameState = (TTTGameState) mcts.search(gameState, 1000);
 
                 // at lest one move by MCTS has to be made before calling this function
                 System.out.println("MCTS depth: " + mcts.getDepth());
