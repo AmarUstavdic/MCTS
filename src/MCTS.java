@@ -1,128 +1,106 @@
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class MCTS {
 
-    private Node root;
+    private MCTSNode root;
 
 
-
+    /**
+     *  Performs the Monte Carlo Tree Search (MCTS) algorithm to find the best move within a
+     *  specified time limit.
+     *
+     *  @param state The initial state from which the MCTS algorithm starts its search.
+     *  @param time The maximum time, in milliseconds, allowed for the search.
+     *  @return The best move determined by the MCTS algorithm.
+     */
     public State search(State state, int time) {
-
         long start = System.currentTimeMillis();
-        root = new Node(state, null);
-
+        root = new MCTSNode(state, null);
         while (System.currentTimeMillis() - start < time) {
-            Node selectedNode = selection();
-            Node expandedNode = expansion(selectedNode);
-            double simulationResult = simulation(expandedNode);
-            backpropagation(expandedNode, simulationResult);
+            MCTSNode selectedMCTSNode = selection();
+            MCTSNode expandedMCTSNode = expansion(selectedMCTSNode);
+            double simulationResult = simulation(expandedMCTSNode);
+            backpropagation(expandedMCTSNode, simulationResult);
         }
-        System.out.println("Number of simulations: " + root.getVisits());
         return root.getBestMove();
     }
 
 
-
-    public int getDepth() {
-        return depth(root);
-    }
-
-    private int depth(Node node) {
-        if (node == null) return 0;
-        if (node.getChildren().isEmpty()) return 1;
-
-        int maxChildDepth = 0;
-        for (Node child : node.getChildren()) {
-            int childDepth = depth(child);
-            maxChildDepth = Math.max(maxChildDepth, childDepth);
-        }
-        return 1 + maxChildDepth;
-    }
-
-
-
-    private void printByLevel() {
-        if (root == null) return;
-
-        Queue<Node> q = new LinkedList<>();
-        q.add(root);
-        int level = 0;
-
-        while (!q.isEmpty()) {
-            int nodesAtCurrentLevel = q.size();
-            System.out.print("LEVEL " + level + ": ");
-
-            for (int i = 0; i < nodesAtCurrentLevel; i++) {
-                Node n = q.remove();
-                n.printStats();
-                System.out.print("   ");
-                q.addAll(n.getChildren());
-            }
-            level++;
-            System.out.println();
-        }
-        System.out.println();
-    }
-
-
-
-    // -----------------------------------
-    //      FOUR MAIN PHASES OF MCTS
-    // -----------------------------------
-
-    private Node selection() {
-        Node node = root;
-        while (node.hasChildren()) {
-            node = node.getBestChild();
-        }
-        return node;
-    }
-
-
-    /*
-        if state has not been simulated --> return that state immediately
-        otherwise, for all legal moves, add children, and then pick a random child, and return it..
+    /**
+     *  Selects the best child node in the Monte Carlo Tree Search (MCTS) process based on the Upper
+     *  Confidence Bound for Trees (UTC) value. Starting from the root node (initial state), iteratively
+     *  navigates through child nodes until reaching a leaf node without further children. This is the first
+     *  phase of MCTS algorithm.
+     *
+     *  @return The most promising leaf node based on UTC formula.
      */
-    private Node expansion(Node node) {
-        if (node.isSimulated() && !node.getState().isTerminal()) {
-            node.expand();
-            return node.getFirstChild();
+    private MCTSNode selection() {
+        MCTSNode MCTSNode = root;
+        while (MCTSNode.hasChildren()) {
+            MCTSNode = MCTSNode.getBestChild();
         }
-        return node;
+        return MCTSNode;
     }
 
-    /*
-        At this step we can do light simulation or heavy simulation.
-        light simulation --> moves are chose randomly
-        heavy simulation --> we can use better heuristics, for choosing moves
-        (by doing heavy simulation, we should get better performing MCTS...)
-        ---------------------------------------------------------------------
-        at this step we can also play with ANN, to teach them and use them instead of simulating game
-     */
-    private double simulation(Node node) {
-        State clonedState = node.getState().deepCopy();
 
-        while (!clonedState.isTerminal()) {
-            clonedState.performRandomAction();
+    /**
+     *  Expands a given Monte Carlo Tree Search (MCTS) node during the Expansion Phase.
+     *  If the state associated with the node has not been simulated yet, expansion phase
+     *  is skipped, and it just returns the node. Otherwise, if the state has been simulated
+     *  at least once, and it is not terminal we expand it by adding children representing
+     *  legal moves. A random child is then selected and returned.
+     *
+     *  @param  MCTSNode The node to be expanded.
+     *  @return A randomly selected child node after expansion, or the original node if
+     *          it has never been simulated before or its state is terminal.
+     */
+    private MCTSNode expansion(MCTSNode MCTSNode) {
+        if (MCTSNode.isSimulated() && !MCTSNode.getState().isTerminal()) {
+            MCTSNode.expand();
+            return MCTSNode.getRandomChild();
         }
+        return MCTSNode;
+    }
+
+
+    /**
+     *  Simulates the outcome of a Monte Carlo Tree Search (MCTS) node during the Simulation Phase.
+     *  The simulation can be either a light simulation, where moves are chosen randomly, or a
+     *  heavy simulation, where better heuristics are used for move selection. Heavy simulation
+     *  typically results in better MCTS performance. Additionally, in simulation phase we could
+     *  employ Artificial Neural Networks (ANN), that can be used for prediction, if so we would
+     *  not have to simulate all the way to the terminal state or att all.
+     *
+     *  @param MCTSNode The node for which state the simulation is about to be performed.
+     *  @return The simulated outcome (reward) of the state associated with the node.
+     */
+    private double simulation(MCTSNode MCTSNode) {
+        State clonedState = MCTSNode.getState().deepCopy();
+        while (!clonedState.isTerminal()) clonedState.performRandomAction();
         return clonedState.getSimulationOutcome();
     }
 
 
-
-    private void backpropagation(Node node, double simulationResult) {
-
-        while (node != null) {
-            node.incVisits();
-            // if current agent == 'x', that means that node corresponds to state where 'o' made last move
-            if (node.isMCTSState()) {
-                node.addValue(simulationResult);
-            } else {
-                node.addValue(Math.pow(simulationResult, -1)); // here we have to invert the value
-            }
-            node = node.getParent();
+    /**
+     *  Performs the backpropagation phase in the Monte Carlo Tree Search (MCTS) algorithm.
+     *  Starting from the given MCTS node, it increments the visit count and updates the value
+     *  statistics based on the simulation result. The backpropagation continues towards the
+     *  root of the tree until reaching the root node. In games with alternating turns, such
+     *  as Tic Tac Toe, it is crucial to alternate the simulation result up the tree based on
+     *  the player associated with each state/node.
+     *
+     *  @param MCTSNode The MCTS node from which the backpropagation begins (the node whose state was simulated).
+     *  @param simulationResult The simulated outcome of the state associated with the node.
+     */
+    private void backpropagation(MCTSNode MCTSNode, double simulationResult) {
+        while (MCTSNode != null) {
+            MCTSNode.incVisits();
+            MCTSNode.addValue(simulationResult);
+            MCTSNode = MCTSNode.getParent();
         }
     }
 
+
+    public MCTSNode getRoot() {
+        return root;
+    }
 }
