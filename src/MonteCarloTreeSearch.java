@@ -41,6 +41,12 @@ public class MonteCarloTreeSearch {
             if (child.hasChildren()) {
                 for (Node grandChild : child.getChildren()) {
                     if (grandChild.getState().equals(state)) {
+
+                        System.out.println("Root replaced with grandchild:");
+                        TicTacToeGameState s = (TicTacToeGameState) grandChild.getState();
+                        s.printBoard();
+                        System.out.println("-------------------------------");
+
                         grandChild.setParent(null);
                         return grandChild;
                     }

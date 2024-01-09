@@ -31,7 +31,7 @@ public class Main {
                 human = false;
             } else {
                 System.out.println("After MCTS [" + gameState.getCURRENT_PLAYER() + "] move:");
-                gameState = (TicTacToeGameState) mcts.search(gameState, 200);
+                gameState = (TicTacToeGameState) mcts.search(gameState, 500);
                 human = true;
             }
             gameState.printBoard();
