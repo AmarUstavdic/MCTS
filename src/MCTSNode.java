@@ -33,12 +33,11 @@ public class MCTSNode {
      *  The new nodes are added to the list of children for the current node.
      */
     public void expand() {
-        List<Action> availableActions = state.getAvailableActions();
-        for (Action action : availableActions) {
-            State clonedState = state.deepCopy();
-            clonedState.performAction(action);
-            children.add(new MCTSNode(clonedState, this));
-        }
+        state.getAvailableActions().stream().map(action -> {
+                    State clonedState = state.deepCopy();
+                    clonedState.performAction(action);
+                    return new MCTSNode(clonedState, this);
+        }).forEach(children::add);
     }
 
     /**
