@@ -87,6 +87,11 @@ public class Node {
         return parent;
     }
 
+    // used for inverting the values on backpropagation
+    public boolean isMCTSState() {
+        return this.state.isMCTSState();
+    }
+
     public void setParent(Node parent) {
         this.parent = parent;
     }

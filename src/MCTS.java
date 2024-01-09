@@ -109,13 +109,17 @@ public class MCTS {
         return clonedState.getSimulationOutcome();
     }
 
+
+
     private void backpropagation(Node node, double simulationResult) {
+
         while (node != null) {
             node.incVisits();
-            if (node.getState().getCurrentAgent() == node.getState().getMCTSAgent()) {
-                node.addValue(simulationResult * -1);
-            } else {
+            // if current agent == 'x', that means that node corresponds to state where 'o' made last move
+            if (node.isMCTSState()) {
                 node.addValue(simulationResult);
+            } else {
+                node.addValue(Math.pow(simulationResult, -1)); // here we have to invert the value
             }
             node = node.getParent();
         }

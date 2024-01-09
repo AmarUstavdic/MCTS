@@ -165,5 +165,10 @@ public class TTTGameState implements State {
         }
     }
 
+    @Override
+    public boolean isMCTSState() {
+        return CURRENT_PLAYER != MCTS_AGENT;
+    }
+
 }
 

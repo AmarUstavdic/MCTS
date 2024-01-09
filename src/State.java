@@ -21,4 +21,6 @@ public interface State {
 
     double getSimulationOutcome();
 
+    boolean isMCTSState();
+
 }
