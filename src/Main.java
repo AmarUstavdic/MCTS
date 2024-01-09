@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        boolean humanFirst = true;
+        boolean humanFirst = false;
         char h = humanFirst ? 'x' : 'o';
         char m = humanFirst ? 'o' : 'x';
 
@@ -25,13 +25,15 @@ public class Main {
                 int row = Integer.parseInt(tokens[0]);
                 int col = Integer.parseInt(tokens[1]);
 
+                // Warning: I am not checking if human is playing legal move, but I should check for that...
+
                 System.out.println("After human [" + gameState.getCURRENT_PLAYER() + "] move:");
 
                 gameState.performAction(new Move(row, col));
                 humanFirst = false;
             } else {
                 System.out.println("After MCTS [" + gameState.getCURRENT_PLAYER() + "] move:");
-                gameState = (TicTacToeGameState) mcts.search(gameState, 100);
+                gameState = (TicTacToeGameState) mcts.search(gameState, 500);
 
                 // at lest one move by MCTS has to be made before calling this function
                 System.out.println("MCTS depth: " + mcts.getDepth());

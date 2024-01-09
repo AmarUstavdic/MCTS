@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class TicTacToeGameState implements State {
 
@@ -112,15 +109,10 @@ public class TicTacToeGameState implements State {
 
     @Override
     public void performRandomAction() {
-        Random random = new Random();
-        while (true) {
-            int row = random.nextInt(0, BOARD_SIZE);
-            int col = random.nextInt(0, BOARD_SIZE);
-            if (isValidMove(row, col)) {
-                performAction(new Move(row, col));
-                return;
-            }
-        }
+
+        List<Action> availableActions = this.getAvailableActions();
+        Collections.shuffle(availableActions);
+        this.performAction(availableActions.getFirst());
     }
 
     @Override
@@ -160,10 +152,26 @@ public class TicTacToeGameState implements State {
 
     @Override
     public double getSimulationOutcome() {
+
         // TODO: Play with this to get it right.
-        double reward = (this.LAST_TO_PLAY == this.MCTS_AGENT) ? 1 : -1;
-        return isWinner() ? 1 * reward : (isDraw() ? 0 : 1 * reward);
+
+        double reward;
+
+        boolean isMCTSLastPlayer = (this.LAST_TO_PLAY == this.MCTS_AGENT);
+
+        // Set the reward based on the conditions
+        if (isWinner()) {
+            reward = isMCTSLastPlayer ? 1 : -1;
+        } else if (isDraw()) {
+            reward = 0;
+        } else {
+            reward = isMCTSLastPlayer ? -1 : 1;
+        }
+
+        return reward;
     }
+
+
 
 }
 

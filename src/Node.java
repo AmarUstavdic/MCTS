@@ -76,6 +76,10 @@ public class Node {
         this.value += value;
     }
 
+    public double getValue() {
+        return this.value;
+    }
+
     public State getState() {
         return state;
     }

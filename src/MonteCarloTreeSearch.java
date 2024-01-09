@@ -14,7 +14,10 @@ public class MonteCarloTreeSearch {
         // here we need to handle root properly, we can use previously discovered info
         // we can use the information that tree has previously discovered
         // therefore we can simply find the successor of root and replace it...
-        root = replace(state);
+        //root = replace(state); // --> this might be why it performs badly
+
+        root = new Node(state, null);
+
 
         while (System.currentTimeMillis() - start < time) {
             Node selectedNode = selection();
@@ -32,7 +35,9 @@ public class MonteCarloTreeSearch {
     }
 
 
-    // Here we made an assumption that it is general simple turn based game
+    // -------------------------------------------------------------
+    // Doing this has it potential problems, bot might perform badly
+    // -------------------------------------------------------------
     private Node replace(State state) {
         // root should have children if I have not made mistake somewhere
         if (root == null) return new Node(state, null);
@@ -106,6 +111,7 @@ public class MonteCarloTreeSearch {
     }
 
     private void backpropagation(Node node, double simulationResult) {
+
         // TODO: Here we might need to alternate the values.
         while (node != null) {
             node.incVisits();
