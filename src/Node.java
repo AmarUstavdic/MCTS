@@ -38,18 +38,11 @@ public class Node {
     }
 
 
+    // cannot return null, that is checked where this function is called
     public Node getBestChild() {
-        Node bestChild = null;
-        double bestUct = Double.NEGATIVE_INFINITY;
-        for (Node child : children) {
-            double childUct = child.calculateUct();
-            if (bestUct < childUct) {
-                bestChild = child;
-                bestUct = childUct;
-            }
-        }
-        return bestChild;
+        return children.stream().max(Comparator.comparingDouble(Node::calculateUct)).orElse(null);
     }
+
 
 
     public State getBestMove() {
