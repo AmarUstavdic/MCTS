@@ -9,7 +9,7 @@ public class TTTGameState implements State {
     private final char MCTS_AGENT;
     private final char HUMAN_PLAYER;
     private char CURRENT_PLAYER;
-    private char LAST_TO_PLAY;
+
 
     public TTTGameState(char HUMAN_PLAYER, char MCTS_AGENT) {
         this.HUMAN_PLAYER = HUMAN_PLAYER;
@@ -31,8 +31,15 @@ public class TTTGameState implements State {
         System.out.println();
     }
 
-    public boolean isWinner() {
-        return checkRows() || checkColumns() || checkDiagonals();
+    /**
+     *  If the MCTS agent has won the game, returns true, otherwise false.
+     */
+    public boolean isMCTSWinner() {
+        return checkRows(MCTS_AGENT) || checkColumns(MCTS_AGENT) || checkDiagonals(MCTS_AGENT);
+    }
+
+    public boolean isHumanWinner() {
+        return checkRows(HUMAN_PLAYER) || checkColumns(HUMAN_PLAYER) || checkDiagonals(HUMAN_PLAYER);
     }
 
     public boolean isDraw() {
@@ -40,33 +47,38 @@ public class TTTGameState implements State {
     }
 
 
-    private boolean checkRows() {
+    private boolean checkRows(char player) {
         for (int i = 0; i < BOARD_SIZE; i++) {
             if (board[i][0] != EMPTY_CELL && board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
-                return true;
+                return board[i][0] == player;
             }
         }
         return false;
     }
 
-    private boolean checkColumns() {
+    private boolean checkColumns(char player) {
         for (int j = 0; j < BOARD_SIZE; j++) {
             if (board[0][j] != EMPTY_CELL && board[0][j] == board[1][j] && board[1][j] == board[2][j]) {
-                return true;
+                return board[0][j] == player;
             }
         }
         return false;
     }
 
-    private boolean checkDiagonals() {
+    private boolean checkDiagonals(char player) {
         if (board[0][0] != EMPTY_CELL && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
-            return true;
-        } else return board[0][2] != EMPTY_CELL && board[0][2] == board[1][1] && board[1][1] == board[2][0];
+            return board[0][0] == player;
+        } else if (board[0][2] != EMPTY_CELL && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+            return board[0][2] == player;
+        }
+        return false;
     }
 
+
     private void switchPlayer() {
-        CURRENT_PLAYER = (CURRENT_PLAYER == 'x') ? 'o' : 'x';
+        CURRENT_PLAYER = (CURRENT_PLAYER == HUMAN_PLAYER) ? MCTS_AGENT : HUMAN_PLAYER;
     }
+
 
     public boolean isValidMove(int row, int col) {
         return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE && board[row][col] == EMPTY_CELL;
@@ -87,7 +99,6 @@ public class TTTGameState implements State {
 
     @Override
     public List<Action> getAvailableActions() {
-        if (isTerminal()) return null; // if game draw, win or lose
         List<Action> availableActions = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
@@ -103,7 +114,6 @@ public class TTTGameState implements State {
     public void performAction(Action action) {
         Move move = (Move) action;
         board[move.getRow()][move.getCol()] = CURRENT_PLAYER;
-        this.LAST_TO_PLAY = CURRENT_PLAYER;
         switchPlayer();
     }
 
@@ -117,9 +127,6 @@ public class TTTGameState implements State {
     @Override
     public State deepCopy() {
         TTTGameState clonedState = new TTTGameState(HUMAN_PLAYER, MCTS_AGENT);
-
-        // TODO: Make sure the current player of the state is correct
-
         clonedState.setCURRENT_PLAYER(this.CURRENT_PLAYER);
         char[][] copy = Arrays.stream(board).map(row -> Arrays.copyOf(row, row.length)).toArray(char[][]::new);
         clonedState.setBoard(copy);
@@ -128,7 +135,7 @@ public class TTTGameState implements State {
 
     @Override
     public boolean isTerminal() {
-        return isWinner() || isDraw();
+        return isDraw() || isMCTSWinner() || isHumanWinner();
     }
 
     @Override
@@ -137,10 +144,6 @@ public class TTTGameState implements State {
         return Arrays.deepEquals(board, gameState.board);
     }
 
-    @Override
-    public char getLastToPlay() {
-        return LAST_TO_PLAY;
-    }
 
     @Override
     public char getCurrentAgent() {
@@ -155,25 +158,12 @@ public class TTTGameState implements State {
     @Override
     public double getSimulationOutcome() {
 
-        // TODO: Play with this to get it right.
-
-        double reward;
-
-        boolean isMCTSLastPlayer = (this.LAST_TO_PLAY == this.MCTS_AGENT);
-
-        // Set the reward based on the conditions
-        if (isWinner()) {
-            reward = isMCTSLastPlayer ? 1 : -1;
-        } else if (isDraw()) {
-            reward = 0;
+        if (isDraw()) {
+            return 0;
         } else {
-            reward = isMCTSLastPlayer ? -1 : 1;
+            return isMCTSWinner() ? 1 : -1;
         }
-
-        return reward;
     }
-
-
 
 }
 

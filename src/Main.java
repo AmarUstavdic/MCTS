@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        boolean humanFirst = false;
+        boolean humanFirst = true;
         char h = humanFirst ? 'x' : 'o';
         char m = humanFirst ? 'o' : 'x';
 

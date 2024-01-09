@@ -18,6 +18,14 @@ public class Node {
 
 
 
+    // only for stats
+    public void printStats() {
+        System.out.print("|n=" + visits + ", v=" + value + "|");
+    }
+
+
+
+
 
     public void expand() {
         List<Action> availableActions = state.getAvailableActions();
@@ -34,8 +42,8 @@ public class Node {
             return Double.MAX_VALUE;
         } else {
             double exploitation = this.value / this.visits;
-            double exploration = Math.sqrt(2 * Math.log(parent.visits) / this.visits);
-            return exploitation + exploration;
+            double exploration = Math.sqrt(Math.log(parent.visits) / this.visits);
+            return exploitation + Math.sqrt(2) * exploration;
         }
     }
 
@@ -52,6 +60,8 @@ public class Node {
         if (best == null) {
             throw new RuntimeException("Unable to get best state. The root has no children!");
         }
+        System.out.println("Value: " + best.value);
+        System.out.println("Visits: " + best.visits);
         return best.getState();
     }
 
@@ -63,10 +73,6 @@ public class Node {
 
     public void addValue(double value) {
         this.value += value;
-    }
-
-    public double getValue() {
-        return this.value;
     }
 
     public State getState() {

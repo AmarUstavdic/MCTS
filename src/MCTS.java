@@ -1,4 +1,5 @@
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class MCTS {
 
@@ -9,57 +10,18 @@ public class MCTS {
     public State search(State state, int time) {
 
         long start = System.currentTimeMillis();
-        int simulations = 0;
-
-        // here we need to handle root properly, we can use previously discovered info
-        // we can use the information that tree has previously discovered
-        // therefore we can simply find the successor of root and replace it...
-        //root = replace(state); // --> this might be why it performs badly
-
         root = new Node(state, null);
-
 
         while (System.currentTimeMillis() - start < time) {
             Node selectedNode = selection();
             Node expandedNode = expansion(selectedNode);
             double simulationResult = simulation(expandedNode);
             backpropagation(expandedNode, simulationResult);
-
-            // for statistics purposes
-            simulations++;
         }
-
-        System.out.println("Number of simulations: " + simulations);
-
+        System.out.println("Number of simulations: " + root.getVisits());
         return root.getBestMove();
     }
 
-
-    // -------------------------------------------------------------
-    // Doing this has it potential problems, bot might perform badly
-    // -------------------------------------------------------------
-    private Node replace(State state) {
-        // root should have children if I have not made mistake somewhere
-        if (root == null) return new Node(state, null);
-        List<Node> children = root.getChildren();
-        for (Node child : children) {
-            if (child.hasChildren()) {
-                for (Node grandChild : child.getChildren()) {
-                    if (grandChild.getState().equals(state)) {
-
-                        System.out.println("Root replaced with grandchild:");
-                        TTTGameState s = (TTTGameState) grandChild.getState();
-                        s.printBoard();
-                        System.out.println("-------------------------------");
-
-                        grandChild.setParent(null);
-                        return grandChild;
-                    }
-                }
-            }
-        }
-        return new Node(state, null);
-    }
 
 
     public int getDepth() {
@@ -77,6 +39,32 @@ public class MCTS {
         }
         return 1 + maxChildDepth;
     }
+
+
+
+    private void printByLevel() {
+        if (root == null) return;
+
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        int level = 0;
+
+        while (!q.isEmpty()) {
+            int nodesAtCurrentLevel = q.size();
+            System.out.print("LEVEL " + level + ": ");
+
+            for (int i = 0; i < nodesAtCurrentLevel; i++) {
+                Node n = q.remove();
+                n.printStats();
+                System.out.print("   ");
+                q.addAll(n.getChildren());
+            }
+            level++;
+            System.out.println();
+        }
+        System.out.println();
+    }
+
 
 
     // -----------------------------------
@@ -97,9 +85,6 @@ public class MCTS {
         otherwise, for all legal moves, add children, and then pick a random child, and return it..
      */
     private Node expansion(Node node) {
-
-        // TODO: Check if this condition after && is okay to have here!
-
         if (node.isSimulated() && !node.getState().isTerminal()) {
             node.expand();
             return node.getFirstChild();
@@ -112,9 +97,12 @@ public class MCTS {
         light simulation --> moves are chose randomly
         heavy simulation --> we can use better heuristics, for choosing moves
         (by doing heavy simulation, we should get better performing MCTS...)
+        ---------------------------------------------------------------------
+        at this step we can also play with ANN, to teach them and use them instead of simulating game
      */
     private double simulation(Node node) {
         State clonedState = node.getState().deepCopy();
+
         while (!clonedState.isTerminal()) {
             clonedState.performRandomAction();
         }
@@ -122,11 +110,13 @@ public class MCTS {
     }
 
     private void backpropagation(Node node, double simulationResult) {
-
-        // TODO: Here we might need to alternate the values.
         while (node != null) {
             node.incVisits();
-            node.addValue(simulationResult);
+            if (node.getState().getCurrentAgent() == node.getState().getMCTSAgent()) {
+                node.addValue(simulationResult * -1);
+            } else {
+                node.addValue(simulationResult);
+            }
             node = node.getParent();
         }
     }

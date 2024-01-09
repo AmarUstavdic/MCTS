@@ -15,8 +15,6 @@ public interface State {
 
     boolean equals(State state);
 
-    char getLastToPlay();
-
     char getCurrentAgent();
 
     char getMCTSAgent();
