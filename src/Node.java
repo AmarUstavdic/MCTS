@@ -31,9 +31,9 @@ public class Node {
         if (visits == 0) {
             return Double.MAX_VALUE;
         } else {
-            double exploitation = value / visits;
-            double exploration = Math.sqrt(Math.log(parent.visits) / visits);
-            return exploitation + Math.sqrt(2) * exploration;
+            double exploitation = this.value / this.visits;
+            double exploration = Math.sqrt(2 * Math.log(parent.visits) / this.visits);
+            return exploitation + exploration;
         }
     }
 
