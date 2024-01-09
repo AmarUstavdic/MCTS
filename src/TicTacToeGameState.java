@@ -9,9 +9,10 @@ public class TicTacToeGameState implements State {
     private final char EMPTY_CELL = '-';
     private final int BOARD_SIZE = 3;
     private char[][] board;
-    private char MCTS_AGENT;
-    private char HUMAN_PLAYER;
+    private final char MCTS_AGENT;
+    private final char HUMAN_PLAYER;
     private char CURRENT_PLAYER;
+    private char LAST_TO_PLAY;
 
     public TicTacToeGameState(char HUMAN_PLAYER, char MCTS_AGENT) {
         this.HUMAN_PLAYER = HUMAN_PLAYER;
@@ -105,6 +106,7 @@ public class TicTacToeGameState implements State {
     public void performAction(Action action) {
         Move move = (Move) action;
         board[move.getRow()][move.getCol()] = CURRENT_PLAYER;
+        this.LAST_TO_PLAY = CURRENT_PLAYER;
         switchPlayer();
     }
 
@@ -136,26 +138,33 @@ public class TicTacToeGameState implements State {
     }
 
     @Override
-    public double getValue() {
-        // because of the switchPlayers method, we have to inverse scoring here
-        double reward = (CURRENT_PLAYER == MCTS_AGENT) ? -1 : 1;
-        return isWinner() ? 1 * reward : (isDraw() ? 0 : -1 * reward);
-    }
-
-    @Override
     public boolean equals(State state) {
         TicTacToeGameState gameState = (TicTacToeGameState) state;
         return Arrays.deepEquals(board, gameState.board);
     }
 
     @Override
-    public char getCurrentPlayer() {
+    public char getLastToPlay() {
+        return LAST_TO_PLAY;
+    }
+
+    @Override
+    public char getCurrentAgent() {
         return CURRENT_PLAYER;
     }
 
     @Override
-    public char getMCTSPlayer() {
+    public char getMCTSAgent() {
         return MCTS_AGENT;
+    }
+
+    @Override
+    public double getSimulationOutcome() {
+
+        // TODO: Make sure this is handled properly.
+        // might have fixed it, but it look awful
+
+        return isWinner() ? 0 : (isDraw() ? 0.5 : 1);
     }
 
 }

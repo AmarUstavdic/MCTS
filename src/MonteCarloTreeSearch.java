@@ -57,6 +57,21 @@ public class MonteCarloTreeSearch {
     }
 
 
+    public int getDepth() {
+        return depth(root);
+    }
+
+    private int depth(Node node) {
+        if (node == null) return 0;
+        if (node.getChildren().isEmpty()) return 1;
+
+        int maxChildDepth = 0;
+        for (Node child : node.getChildren()) {
+            int childDepth = depth(child);
+            maxChildDepth = Math.max(maxChildDepth, childDepth);
+        }
+        return 1 + maxChildDepth;
+    }
 
 
     // -----------------------------------
@@ -87,16 +102,21 @@ public class MonteCarloTreeSearch {
         while (!clonedState.isTerminal()) {
             clonedState.performRandomAction();
         }
-        return clonedState.getValue();
+        return clonedState.getSimulationOutcome();
     }
 
     private void backpropagation(Node node, double simulationResult) {
 
-        // TODO: Test if backpropagation works correctly!
+        // TODO: Here we need to alternate values depending on the node that we are currently at.
+        // Might have fixed it.
 
         while (node != null) {
             node.incVisits();
-            node.addValue(simulationResult);
+            if (node.getState().getLastToPlay() == node.getState().getMCTSAgent()) {
+                node.addValue(simulationResult);
+            } else {
+                node.addValue((simulationResult == 1) ? 0 : (simulationResult == 0 ? 1 : 0.5));
+            }
             node = node.getParent();
         }
     }

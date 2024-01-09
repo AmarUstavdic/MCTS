@@ -13,12 +13,14 @@ public interface State {
 
     boolean isTerminal();
 
-    double getValue();
-
     boolean equals(State state);
 
-    char getCurrentPlayer();
+    char getLastToPlay();
 
-    char getMCTSPlayer();
+    char getCurrentAgent();
+
+    char getMCTSAgent();
+
+    double getSimulationOutcome();
 
 }
