@@ -1,11 +1,11 @@
-# Monte Carlo Tree Search (MCTS) Algorithm
+# Monte Carlo Tree Search (MCTS.MCTS) Algorithm
 
-This repository contains a Java implementation of the Monte Carlo Tree Search (MCTS) algorithm, 
+This repository contains a Java implementation of the Monte Carlo Tree Search (MCTS.MCTS) algorithm, 
 a popular technique used in decision-making processes for games and simulations.
 
 ## Overview
 
-The MCTS algorithm is used to find the best move in a game or simulation within a specified time
+The MCTS.MCTS algorithm is used to find the best move in a game or simulation within a specified time
 limit. It leverages the Upper Confidence Bound for Trees (UTC) value to guide its search through 
 possible moves. The algorithm consists of four main phases:
 
@@ -20,40 +20,41 @@ possible moves. The algorithm consists of four main phases:
 
 ## Additional Feature: Tic-Tac-Toe Environment
 
-In addition to the MCTS algorithm implementation, this repository features a simple implementation of the Tic Tac Toe game. The Tic Tac Toe environment is utilized as a testing ground for the MCTS algorithm. This allows testing and evaluating the algorithm's performance in a familiar and well-defined game setting.
+In addition to the MCTS.MCTS algorithm implementation, this repository features a simple implementation of the Tic Tac Toe game. The Tic Tac Toe environment is utilized as a testing ground for the MCTS.MCTS algorithm. This allows testing and evaluating the algorithm's performance in a familiar and well-defined game setting.
 
 
 
 ## Getting Started
 
-To use the MCTS algorithm in your project:
+To use the MCTS.MCTS algorithm in your project:
 
 1. Clone this repository:
 
 ```bash
-https://github.com/AmarUstavdic/MCTS.git
+https://github.com/AmarUstavdic/MCTS.MCTS.git
 ```
 
-2. Integrate the `MCTS` class and the associated `MCTSNode` and `State` and `Action` interfaces into your project. If you want to get some stats of MCTS performance you can also include `MCTSUtils` class in your project.
+2. Integrate the `MCTS.MCTS` class and the associated `MCTS.MCTSNode` and `MCTS.State` and `MCTS.Action` interfaces into your project. If you want to get some stats of MCTS.MCTS performance you can also include `MCTS.MCTSUtils` class in your project.
 
-3. Use the `search` method of the `MCTS` class to find the best move within a specified time limit.
+3. Use the `search` method of the `MCTS.MCTS` class to find the best move within a specified time limit.
 
 
 ## Example Usage
 
 ```java
-// Create an initial game state
+import MCTS.MCTS;
+import MCTS.State;// Create an initial game state
 State initialState = new YourGameStateClass(/* pass relevant parameters */);
 
-// Create an instance of the MCTS algorithm
+// Create an instance of the MCTS.MCTS algorithm
 MCTS mcts = new MCTS();
 
-// Perform the MCTS search for a specified time
+// Perform the MCTS.MCTS search for a specified time
 int searchTimeMillis = 5000; // 5 seconds
 State bestNextState = mcts.search(initialState, searchTimeMillis);
 ```
 
-> Note that you have to implement, how you would like to retrieve the actions, from the next state that has been found by the MCTS algorithm.
+> Note that you have to implement, how you would like to retrieve the actions, from the next state that has been found by the MCTS.MCTS algorithm.
 
 ## Contributions and Feedback
 Feel free to contribute to this project, report any issues, or suggest improvements. Your input is valuable, and together we can make this project even better. Happy coding!

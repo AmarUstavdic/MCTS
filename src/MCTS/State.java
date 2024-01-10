@@ -1,11 +1,13 @@
+package MCTS;
+
 import java.util.List;
 
 /**
- *  Represents a state in a game or simulation within the context of Monte Carlo Tree Search (MCTS).
+ *  Represents a state in a game or simulation within the context of Monte Carlo Tree Search (MCTS.MCTS).
  *  A state encapsulates the current state of the system, provides methods to interact with it, and
- *  defines behaviors relevant to MCTS, such as obtaining available actions, performing actions,
+ *  defines behaviors relevant to MCTS.MCTS, such as obtaining available actions, performing actions,
  *  creating deep copies, checking for terminal states, getting simulation outcomes, and identifying
- *  whether it corresponds to an MCTS agent's turn.
+ *  whether it corresponds to an MCTS.MCTS agent's turn.
  */
 public interface State {
 
@@ -50,9 +52,9 @@ public interface State {
     double getSimulationOutcome();
 
     /**
-     *  Checks whether the current state corresponds to an MCTS agent's turn.
+     *  Checks whether the current state corresponds to an MCTS.MCTS agent's turn.
      *
-     *  @return {@code true} if it is an MCTS agent's turn, {@code false} otherwise.
+     *  @return {@code true} if it is an MCTS.MCTS agent's turn, {@code false} otherwise.
      */
     boolean isMCTSAgentState();
 

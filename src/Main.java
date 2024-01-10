@@ -1,3 +1,7 @@
+import MCTS.MCTS;
+import TicTacToe.Move;
+import TicTacToe.TTTGameState;
+
 import java.util.Scanner;
 
 public class Main {
@@ -36,7 +40,6 @@ public class Main {
             } else {
                 System.out.println("After MCTS [" + gameState.getCURRENT_PLAYER() + "] move:");
                 gameState = (TTTGameState) mcts.searchWithIterationsLimit(gameState, 54);
-                System.out.println("Depth: " + MCTSUtils.depth(mcts.getRoot()));
                 humanFirst = !humanFirst;
             }
             gameState.printBoard();

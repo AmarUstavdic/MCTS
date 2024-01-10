@@ -1,3 +1,8 @@
+package TicTacToe;
+
+import MCTS.Action;
+import MCTS.State;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

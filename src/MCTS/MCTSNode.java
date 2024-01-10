@@ -1,3 +1,5 @@
+package MCTS;
+
 import java.util.*;
 
 public class MCTSNode {
@@ -87,7 +89,7 @@ public class MCTSNode {
 
     /**
      *  Adds a value to the cumulative value of the node based on the type of state.
-     *  If the state corresponds to a Monte Carlo Tree Search Agent (MCTS) state, the value is added.
+     *  If the state corresponds to a Monte Carlo Tree Search Agent (MCTS.MCTS) state, the value is added.
      *  Otherwise, the value is subtracted.
      *
      *  @param value The value to be added or subtracted based on the state type.

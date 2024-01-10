@@ -1,3 +1,7 @@
+package TicTacToe;
+
+import MCTS.Action;
+
 public class Move implements Action {
 
     private final int row;

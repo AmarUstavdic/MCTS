@@ -1,3 +1,4 @@
+package MCTS;
 
 public class MCTS {
 
@@ -5,12 +6,12 @@ public class MCTS {
 
 
     /**
-     *  Performs the Monte Carlo Tree Search (MCTS) algorithm to find the best move within a
+     *  Performs the Monte Carlo Tree Search (MCTS.MCTS) algorithm to find the best move within a
      *  specified time limit.
      *
-     *  @param state The initial state from which the MCTS algorithm starts its search.
+     *  @param state The initial state from which the MCTS.MCTS algorithm starts its search.
      *  @param time The maximum time, in milliseconds, allowed for the search.
-     *  @return The best move determined by the MCTS algorithm.
+     *  @return The best move determined by the MCTS.MCTS algorithm.
      */
     public State searchWithTimeLimit(State state, int time) {
         long start = System.currentTimeMillis();
@@ -25,12 +26,12 @@ public class MCTS {
     }
 
     /**
-     *  Performs the Monte Carlo Tree Search (MCTS) algorithm to find the best move within a
+     *  Performs the Monte Carlo Tree Search (MCTS.MCTS) algorithm to find the best move within a
      *  specified time limit.
      *
-     *  @param state The initial state from which the MCTS algorithm starts its search.
+     *  @param state The initial state from which the MCTS.MCTS algorithm starts its search.
      *  @param maxIterations The maximum number of iterations, allowed for the search.
-     *  @return The best move determined by the MCTS algorithm.
+     *  @return The best move determined by the MCTS.MCTS algorithm.
      */
     public State searchWithIterationsLimit(State state, int maxIterations) {
         root = new MCTSNode(state, null);
@@ -44,10 +45,10 @@ public class MCTS {
     }
 
     /**
-     *  Selects the best child node in the Monte Carlo Tree Search (MCTS) process based on the Upper
+     *  Selects the best child node in the Monte Carlo Tree Search (MCTS.MCTS) process based on the Upper
      *  Confidence Bound for Trees (UTC) value. Starting from the root node (initial state), iteratively
      *  navigates through child nodes until reaching a leaf node without further children. This is the first
-     *  phase of MCTS algorithm.
+     *  phase of MCTS.MCTS algorithm.
      *
      *  @return The most promising leaf node based on UTC formula.
      */
@@ -60,7 +61,7 @@ public class MCTS {
     }
 
     /**
-     *  Expands a given Monte Carlo Tree Search (MCTS) node during the Expansion Phase.
+     *  Expands a given Monte Carlo Tree Search (MCTS.MCTS) node during the Expansion Phase.
      *  If the state associated with the node has not been simulated yet, expansion phase
      *  is skipped, and it just returns the node. Otherwise, if the state has been simulated
      *  at least once, and it is not terminal we expand it by adding children representing
@@ -79,10 +80,10 @@ public class MCTS {
     }
 
     /**
-     *  Simulates the outcome of a Monte Carlo Tree Search (MCTS) node during the Simulation Phase.
+     *  Simulates the outcome of a Monte Carlo Tree Search (MCTS.MCTS) node during the Simulation Phase.
      *  The simulation can be either a light simulation, where moves are chosen randomly, or a
      *  heavy simulation, where better heuristics are used for move selection. Heavy simulation
-     *  typically results in better MCTS performance. Additionally, in simulation phase we could
+     *  typically results in better MCTS.MCTS performance. Additionally, in simulation phase we could
      *  employ Artificial Neural Networks (ANN), that can be used for prediction, if so we would
      *  not have to simulate all the way to the terminal state or att all.
      *
@@ -96,14 +97,14 @@ public class MCTS {
     }
 
     /**
-     *  Performs the backpropagation phase in the Monte Carlo Tree Search (MCTS) algorithm.
-     *  Starting from the given MCTS node, it increments the visit count and updates the value
+     *  Performs the backpropagation phase in the Monte Carlo Tree Search (MCTS.MCTS) algorithm.
+     *  Starting from the given MCTS.MCTS node, it increments the visit count and updates the value
      *  statistics based on the simulation result. The backpropagation continues towards the
      *  root of the tree until reaching the root node. In games with alternating turns, such
      *  as Tic Tac Toe, it is crucial to alternate the simulation result up the tree based on
      *  the player associated with each state/node.
      *
-     *  @param MCTSNode The MCTS node from which the backpropagation begins (the node whose state was simulated).
+     *  @param MCTSNode The MCTS.MCTS node from which the backpropagation begins (the node whose state was simulated).
      *  @param simulationResult The simulated outcome of the state associated with the node.
      */
     private void backpropagation(MCTSNode MCTSNode, double simulationResult) {
