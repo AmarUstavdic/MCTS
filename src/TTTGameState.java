@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TTTGameState implements State {
 
@@ -20,20 +22,11 @@ public class TTTGameState implements State {
     }
 
 
-
-
     public void printBoard() {
-        Arrays.stream(board)
-                .map(String::new)
-                .map(rowString -> rowString
-                .replace("", " ")
-                .trim()).forEach(System.out::println);
+        Arrays.stream(board).map(String::new).map(r -> r.replace("", " ").trim()).forEach(System.out::println);
         System.out.println();
     }
 
-    /**
-     *  If the MCTS agent has won the game, returns true, otherwise false.
-     */
     public boolean isMCTSWinner() {
         return checkRows(MCTS_AGENT) || checkColumns(MCTS_AGENT) || checkDiagonals(MCTS_AGENT);
     }
@@ -74,16 +67,13 @@ public class TTTGameState implements State {
         return false;
     }
 
-
     private void switchPlayer() {
         CURRENT_PLAYER = (CURRENT_PLAYER == HUMAN_PLAYER) ? MCTS_AGENT : HUMAN_PLAYER;
     }
 
-
     public boolean isValidMove(int row, int col) {
         return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE && board[row][col] == EMPTY_CELL;
     }
-
 
     public void setBoard(char[][] board) {
         this.board = board;
@@ -99,15 +89,10 @@ public class TTTGameState implements State {
 
     @Override
     public List<Action> getAvailableActions() {
-        List<Action> availableActions = new ArrayList<>();
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if (board[i][j] == EMPTY_CELL) {
-                    availableActions.add(new Move(i, j));
-                }
-            }
-        }
-        return availableActions;
+        return IntStream.range(0, BOARD_SIZE).boxed()
+                .flatMap(i -> IntStream.range(0, BOARD_SIZE)
+                .filter(j -> board[i][j] == EMPTY_CELL)
+                .mapToObj(j -> new Move(i, j))).collect(Collectors.toList());
     }
 
     @Override
@@ -139,36 +124,13 @@ public class TTTGameState implements State {
     }
 
     @Override
-    public boolean equals(State state) {
-        TTTGameState gameState = (TTTGameState) state;
-        return Arrays.deepEquals(board, gameState.board);
-    }
-
-
-    @Override
-    public char getCurrentAgent() {
-        return CURRENT_PLAYER;
-    }
-
-    @Override
-    public char getMCTSAgent() {
-        return MCTS_AGENT;
-    }
-
-    @Override
     public double getSimulationOutcome() {
-
-        if (isDraw()) {
-            return 0;
-        } else {
-            return isMCTSWinner() ? 1 : -1;
-        }
+        return isDraw() ? 0 : (isMCTSWinner() ? 1 : -1);
     }
 
     @Override
-    public boolean isMCTSState() {
+    public boolean isMCTSAgentState() {
         return CURRENT_PLAYER != MCTS_AGENT;
     }
-
 }
 

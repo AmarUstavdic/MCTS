@@ -35,16 +35,11 @@ public class Main {
                 humanFirst = !humanFirst;
             } else {
                 System.out.println("After MCTS [" + gameState.getCURRENT_PLAYER() + "] move:");
-                gameState = (TTTGameState) mcts.search(gameState, 500);
-
-                // at lest one move by MCTS has to be made before calling this function
-                System.out.println("MCTS depth: " + mcts.getDepth());
+                gameState = (TTTGameState) mcts.search(gameState, 300);
                 humanFirst = !humanFirst;
             }
             gameState.printBoard();
         }
-
         System.out.println("MCTS reward: " + gameState.getSimulationOutcome());
-
     }
 }
