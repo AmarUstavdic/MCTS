@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        boolean humanFirst = true;
+        boolean humanFirst = false;
         char h = humanFirst ? 'x' : 'o';
         char m = humanFirst ? 'o' : 'x';
 
@@ -35,7 +35,8 @@ public class Main {
                 humanFirst = !humanFirst;
             } else {
                 System.out.println("After MCTS [" + gameState.getCURRENT_PLAYER() + "] move:");
-                gameState = (TTTGameState) mcts.search(gameState, 500);
+                gameState = (TTTGameState) mcts.searchWithIterationsLimit(gameState, 54);
+                System.out.println("Depth: " + MCTSUtils.depth(mcts.getRoot()));
                 humanFirst = !humanFirst;
             }
             gameState.printBoard();

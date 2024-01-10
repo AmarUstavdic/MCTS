@@ -12,10 +12,29 @@ public class MCTS {
      *  @param time The maximum time, in milliseconds, allowed for the search.
      *  @return The best move determined by the MCTS algorithm.
      */
-    public State search(State state, int time) {
+    public State searchWithTimeLimit(State state, int time) {
         long start = System.currentTimeMillis();
         root = new MCTSNode(state, null);
         while (System.currentTimeMillis() - start < time) {
+            MCTSNode selectedMCTSNode = selection();
+            MCTSNode expandedMCTSNode = expansion(selectedMCTSNode);
+            double simulationResult = simulation(expandedMCTSNode);
+            backpropagation(expandedMCTSNode, simulationResult);
+        }
+        return root.getBestMove();
+    }
+
+    /**
+     *  Performs the Monte Carlo Tree Search (MCTS) algorithm to find the best move within a
+     *  specified time limit.
+     *
+     *  @param state The initial state from which the MCTS algorithm starts its search.
+     *  @param maxIterations The maximum number of iterations, allowed for the search.
+     *  @return The best move determined by the MCTS algorithm.
+     */
+    public State searchWithIterationsLimit(State state, int maxIterations) {
+        root = new MCTSNode(state, null);
+        for (int i = 0; i < maxIterations; i++) {
             MCTSNode selectedMCTSNode = selection();
             MCTSNode expandedMCTSNode = expansion(selectedMCTSNode);
             double simulationResult = simulation(expandedMCTSNode);
