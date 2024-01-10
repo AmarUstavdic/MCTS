@@ -35,7 +35,7 @@ public class Main {
                 humanFirst = !humanFirst;
             } else {
                 System.out.println("After MCTS [" + gameState.getCURRENT_PLAYER() + "] move:");
-                gameState = (TTTGameState) mcts.search(gameState, 300);
+                gameState = (TTTGameState) mcts.search(gameState, 500);
                 humanFirst = !humanFirst;
             }
             gameState.printBoard();
